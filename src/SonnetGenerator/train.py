@@ -8,11 +8,13 @@ from transformers import SubsetRandomSampler
 from torch.utils.data import DataLoader
 from dataloader import SonnetDataset
 from engine import Engine
+from model import get_model
+from train_config import Config
 
 
-def perform_run(config,model,tokenizer,weight_path='./',load_weights_path=None):
+def perform_run(data_path,config,model,tokenizer,weight_path='./',load_weights_path=None):
     
-    sonnet_files=['Sonnets.txt']
+    sonnet_files=[data_path]
     datasett=SonnetDataset(sonnet_files,tokenizer)
     indices=list(range(len(datasett)))
     random.shuffle(indices)
@@ -47,3 +49,6 @@ def seed_everything(seed):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True   
     
+seed_everything(42)
+model,tokenizer=get_model()
+perform_run('Sonnets.txt',Config,model,tokenizer,Config.load_weight_path)    
