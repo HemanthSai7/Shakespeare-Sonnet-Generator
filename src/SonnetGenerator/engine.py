@@ -48,7 +48,7 @@ class Engine:
         summary_loss = self.train_one_epoch(train_loader)
         self.train_loss[epoch] = summary_loss.avg
 
-        print('Train : Epoch {:03}: | Summary Loss: {:.3f} | Training time: {}'.format(epoch, summary_loss.avg, time.time() - t))
+        print(f'Train : Epoch {epoch}: | Summary Loss: {summary_loss.avg} | Training time: {time.time() - t}')
             
         t=time.time()
         print("Validation Started...")
@@ -56,11 +56,11 @@ class Engine:
         summary_loss = self.validation(valid_loader)
         self.valid_loss[epoch] = summary_loss.avg
 
-        print('Valid : Epoch {:03}: | Summary Loss: {:.3f} | Training time: {}'.format(epoch, summary_loss.avg, time.time() - t))
+        print(f'Valid : Epoch {epoch}: | Summary Loss: {summary_loss.avg} | Training time: {time.time() - t}')
         
         if not self.best_score:
             self.best_score = summary_loss.avg
-            print('Saving model with lowest validation loss as {}'.format(self.best_score))
+            print(f'Saving model with lowest validation loss as {self.best_score}')
             self.model.eval()   
             patience = self.config.patience
             torch.save({'model_state_dict': self.model.state_dict(),'best_score': self.best_score, 'epoch': epoch},  f"{self.weight_path}/{self.save_file_name}.pt")
@@ -69,13 +69,13 @@ class Engine:
         if summary_loss.avg <= self.best_score:
             self.best_score = summary_loss.avg
             patience = self.config.patience  
-            print('Imporved model with lowest validation loss as {}'.format(self.best_score))
+            print('Improved model with lowest validation loss as {}'.format(self.best_score))
             torch.save({'model_state_dict': self.model.state_dict(),'best_score': self.best_score, 'epoch': epoch},  f"{self.weight_path}/{self.save_file_name}.pt")
         else:
             patience -= 1
             print('Patience Reduced')
             if patience == 0:
-                print('Early stopping. Lowest validation loss achieved: {:.3f}'.format(self.best_score))
+                print(f'Early stopping. Lowest validation loss achieved: {self.best_score}')
                 break
 
     def train_one_epoch(self, train_loader):
