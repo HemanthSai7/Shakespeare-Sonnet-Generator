@@ -4,8 +4,7 @@ import random
 
 import torch
 import numpy as np
-from transformers import SubsetRandomSampler
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader,SubsetRandomSampler
 from dataloader import SonnetDataset
 from engine import Engine
 from model import get_model
